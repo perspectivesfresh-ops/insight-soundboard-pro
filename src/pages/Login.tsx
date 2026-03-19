@@ -30,9 +30,9 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-16 w-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-            <img src={guidantLogo} alt="Guidant.AI" className="h-10 brightness-0 invert" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-24 w-24 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+            <img src={guidantLogo} alt="Guidant.AI" className="h-16 brightness-0 invert" />
           </div>
           <div className="text-center">
             <h1 className="text-2xl font-display font-bold text-foreground">Guidant.AI</h1>
