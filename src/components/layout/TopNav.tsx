@@ -1,5 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Mic, Phone, Video } from 'lucide-react';
+import { LayoutDashboard, Mic, Phone, Video, LogOut } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
+import { Button } from '@/components/ui/button';
 import guidantLogo from '@/assets/guidant-logo.png';
 
 const navItems = [
@@ -11,10 +13,11 @@ const navItems = [
 
 export function TopNav() {
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 h-14">
+      <div className="max-w-[1600px] mx-auto flex items-center justify-between px-4 md:px-6 h-14">
         <img src={guidantLogo} alt="Guidant.AI" className="h-7 brightness-0 invert" />
         <nav className="hidden md:flex items-center gap-1">
           {navItems.map(({ to, icon: Icon, label }) => {
@@ -33,8 +36,17 @@ export function TopNav() {
             );
           })}
         </nav>
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold">CF</div>
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <p className="text-xs font-medium leading-tight">{user?.name}</p>
+            <p className="text-[10px] text-white/60">{user?.roleLabel}</p>
+          </div>
+          <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold">
+            {user?.initials}
+          </div>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10" onClick={logout}>
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </header>
