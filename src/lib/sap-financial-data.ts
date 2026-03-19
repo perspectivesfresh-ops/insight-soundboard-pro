@@ -1,77 +1,29 @@
 // Synthetic SAP-style financial data for advanced KPIs
 
-export interface DSOData {
-  month: string;
-  dso: number;
-  target: number;
-}
+// ── Types ──────────────────────────────────────────────────
 
-export interface AgingBucket {
-  bucket: string;
-  amount: number;
-  percentage: number;
-  color: string;
-}
+export interface DSOData { month: string; dso: number; target: number; }
+export interface AgingBucket { bucket: string; amount: number; percentage: number; color: string; }
+export interface OverdueReceivable { customer: string; amount: number; daysPastDue: number; risk: 'high' | 'medium' | 'low'; invoiceCount: number; }
+export interface DisputeItem { id: string; customer: string; amount: number; reason: string; status: 'open' | 'in_review' | 'resolved'; daysOpen: number; }
+export interface CashCollection { month: string; collected: number; target: number; }
+export interface CashLiquidity { date: string; balance: number; inflow: number; outflow: number; }
+export interface WriteOff { quarter: string; amount: number; recovered: number; }
+export interface HighRiskInvoice { invoiceNo: string; customer: string; amount: number; dueDate: string; risk: number; reason: string; dso: number; riskLevel: 'low' | 'medium' | 'high'; }
+export interface PayableItem { vendor: string; amount: number; dueDate: string; status: 'pending' | 'approved' | 'paid'; category: string; }
+export interface ForecastData { month: string; actual: number | null; forecast: number; variance: number | null; }
 
-export interface OverdueReceivable {
-  customer: string;
-  amount: number;
-  daysPastDue: number;
-  risk: 'high' | 'medium' | 'low';
-  invoiceCount: number;
-}
+// SAP ACDOCA-style GL entries
+export interface GLEntry { docNo: string; companyCode: string; account: string; accountName: string; amount: number; currency: string; postingDate: string; documentType: string; }
+// SAP BSID-style receivables
+export interface ReceivableEntry { docNo: string; customer: string; customerName: string; amount: number; dueDate: string; clearingDate: string | null; daysPastDue: number; }
+// SAP BSEG-style payable entries
+export interface PayableEntry { docNo: string; vendor: string; vendorName: string; amount: number; dueDate: string; paymentDate: string | null; status: 'open' | 'cleared'; }
 
-export interface DisputeItem {
-  id: string;
-  customer: string;
-  amount: number;
-  reason: string;
-  status: 'open' | 'in_review' | 'resolved';
-  daysOpen: number;
-}
+// Cash management KPIs
+export interface CashKPI { label: string; value: string; numericValue: number; unit: string; status: 'good' | 'warning' | 'critical'; trend: number; description: string; }
 
-export interface CashCollection {
-  month: string;
-  collected: number;
-  target: number;
-}
-
-export interface CashLiquidity {
-  date: string;
-  balance: number;
-  inflow: number;
-  outflow: number;
-}
-
-export interface WriteOff {
-  quarter: string;
-  amount: number;
-  recovered: number;
-}
-
-export interface HighRiskInvoice {
-  invoiceNo: string;
-  customer: string;
-  amount: number;
-  dueDate: string;
-  risk: number;
-  reason: string;
-}
-
-export interface PayableItem {
-  vendor: string;
-  amount: number;
-  dueDate: string;
-  status: 'pending' | 'approved' | 'paid';
-  category: string;
-}
-
-export interface ForecastData {
-  month: string;
-  actual: number | null;
-  forecast: number;
-  variance: number | null;
-}
+// ── Data ───────────────────────────────────────────────────
 
 export const dsoTrend: DSOData[] = [
   { month: 'Jul', dso: 48, target: 40 },
@@ -141,11 +93,16 @@ export const writeOffs: WriteOff[] = [
 ];
 
 export const highRiskInvoices: HighRiskInvoice[] = [
-  { invoiceNo: 'INV-4521', customer: 'Acme Corp', amount: 320000, dueDate: '2024-01-15', risk: 92, reason: 'Payment history + aging' },
-  { invoiceNo: 'INV-4498', customer: 'GlobalTech Ltd', amount: 275000, dueDate: '2024-01-22', risk: 87, reason: 'Credit score decline' },
-  { invoiceNo: 'INV-4510', customer: 'Pinnacle Systems', amount: 195000, dueDate: '2024-02-01', risk: 78, reason: 'Dispute pending' },
-  { invoiceNo: 'INV-4533', customer: 'Vertex Industries', amount: 165000, dueDate: '2024-02-10', risk: 72, reason: 'Sector downturn' },
-  { invoiceNo: 'INV-4545', customer: 'NovaTech Solutions', amount: 140000, dueDate: '2024-02-18', risk: 65, reason: 'Late payment trend' },
+  { invoiceNo: 'INV-4521', customer: 'Acme Corp', amount: 320000, dueDate: '2024-01-15', risk: 92, reason: 'Payment history + aging', dso: 135, riskLevel: 'high' },
+  { invoiceNo: 'INV-4498', customer: 'GlobalTech Ltd', amount: 275000, dueDate: '2024-01-22', risk: 87, reason: 'Credit score decline', dso: 125, riskLevel: 'high' },
+  { invoiceNo: 'INV-4510', customer: 'Pinnacle Systems', amount: 195000, dueDate: '2024-02-01', risk: 78, reason: 'Dispute pending', dso: 98, riskLevel: 'medium' },
+  { invoiceNo: 'INV-4533', customer: 'Vertex Industries', amount: 165000, dueDate: '2024-02-10', risk: 72, reason: 'Sector downturn', dso: 92, riskLevel: 'medium' },
+  { invoiceNo: 'INV-4545', customer: 'NovaTech Solutions', amount: 140000, dueDate: '2024-02-18', risk: 65, reason: 'Late payment trend', dso: 88, riskLevel: 'medium' },
+  { invoiceNo: 'INV-4558', customer: 'Meridian Group', amount: 120000, dueDate: '2024-02-25', risk: 58, reason: 'Volume decrease', dso: 75, riskLevel: 'low' },
+  { invoiceNo: 'INV-4562', customer: 'Summit Partners', amount: 98000, dueDate: '2024-03-01', risk: 52, reason: 'New customer risk', dso: 68, riskLevel: 'low' },
+  { invoiceNo: 'INV-4571', customer: 'Crestline Inc', amount: 87000, dueDate: '2024-03-05', risk: 48, reason: 'Industry volatility', dso: 62, riskLevel: 'low' },
+  { invoiceNo: 'INV-4580', customer: 'BluePeak Analytics', amount: 76000, dueDate: '2024-03-10', risk: 44, reason: 'Slow payment pattern', dso: 60, riskLevel: 'low' },
+  { invoiceNo: 'INV-4589', customer: 'Ironclad Systems', amount: 65000, dueDate: '2024-03-15', risk: 40, reason: 'Regional economic risk', dso: 55, riskLevel: 'low' },
 ];
 
 export const payables: PayableItem[] = [
@@ -168,6 +125,113 @@ export const forecastData: ForecastData[] = [
   { month: 'Mar', actual: null, forecast: 7900, variance: null },
 ];
 
+// ── SAP ACDOCA GL Entries ──────────────────────────────────
+export const glEntries: GLEntry[] = [
+  { docNo: 'GL-100001', companyCode: '1000', account: '400000', accountName: 'Revenue - Products', amount: 2850000, currency: 'USD', postingDate: '2024-01-15', documentType: 'RV' },
+  { docNo: 'GL-100002', companyCode: '1000', account: '400100', accountName: 'Revenue - Services', amount: 1450000, currency: 'USD', postingDate: '2024-01-20', documentType: 'RV' },
+  { docNo: 'GL-100003', companyCode: '1000', account: '500000', accountName: 'COGS - Materials', amount: -1200000, currency: 'USD', postingDate: '2024-01-22', documentType: 'RE' },
+  { docNo: 'GL-100004', companyCode: '1000', account: '610000', accountName: 'Salaries & Wages', amount: -890000, currency: 'USD', postingDate: '2024-01-31', documentType: 'SA' },
+  { docNo: 'GL-100005', companyCode: '1000', account: '620000', accountName: 'Marketing Expense', amount: -320000, currency: 'USD', postingDate: '2024-02-05', documentType: 'KR' },
+  { docNo: 'GL-100006', companyCode: '1000', account: '630000', accountName: 'R&D Expense', amount: -450000, currency: 'USD', postingDate: '2024-02-10', documentType: 'KR' },
+  { docNo: 'GL-100007', companyCode: '1000', account: '140000', accountName: 'Accounts Receivable', amount: 4300000, currency: 'USD', postingDate: '2024-02-15', documentType: 'DR' },
+  { docNo: 'GL-100008', companyCode: '1000', account: '210000', accountName: 'Accounts Payable', amount: -1680000, currency: 'USD', postingDate: '2024-02-20', documentType: 'KR' },
+];
+
+// ── SAP BSID Receivable Entries ────────────────────────────
+export const receivableEntries: ReceivableEntry[] = [
+  { docNo: 'AR-200001', customer: 'C-1001', customerName: 'Acme Corp', amount: 320000, dueDate: '2024-01-15', clearingDate: null, daysPastDue: 65 },
+  { docNo: 'AR-200002', customer: 'C-1002', customerName: 'GlobalTech Ltd', amount: 275000, dueDate: '2024-01-22', clearingDate: null, daysPastDue: 58 },
+  { docNo: 'AR-200003', customer: 'C-1003', customerName: 'Pinnacle Systems', amount: 195000, dueDate: '2024-02-01', clearingDate: null, daysPastDue: 48 },
+  { docNo: 'AR-200004', customer: 'C-1004', customerName: 'Vertex Industries', amount: 165000, dueDate: '2024-02-10', clearingDate: '2024-03-01', daysPastDue: 0 },
+  { docNo: 'AR-200005', customer: 'C-1005', customerName: 'NovaTech Solutions', amount: 140000, dueDate: '2024-02-18', clearingDate: null, daysPastDue: 30 },
+  { docNo: 'AR-200006', customer: 'C-1006', customerName: 'Meridian Group', amount: 120000, dueDate: '2024-02-25', clearingDate: '2024-03-10', daysPastDue: 0 },
+  { docNo: 'AR-200007', customer: 'C-1007', customerName: 'Summit Partners', amount: 98000, dueDate: '2024-03-01', clearingDate: null, daysPastDue: 18 },
+  { docNo: 'AR-200008', customer: 'C-1008', customerName: 'Crestline Inc', amount: 87000, dueDate: '2024-03-05', clearingDate: null, daysPastDue: 14 },
+];
+
+// ── SAP BSEG Payable Entries ───────────────────────────────
+export const payableEntries: PayableEntry[] = [
+  { docNo: 'AP-300001', vendor: 'V-2001', vendorName: 'AWS Cloud Services', amount: 285000, dueDate: '2024-03-15', paymentDate: null, status: 'open' },
+  { docNo: 'AP-300002', vendor: 'V-2002', vendorName: 'Office Solutions Inc', amount: 125000, dueDate: '2024-03-20', paymentDate: null, status: 'open' },
+  { docNo: 'AP-300003', vendor: 'V-2003', vendorName: 'TalentForce HR', amount: 195000, dueDate: '2024-03-22', paymentDate: null, status: 'open' },
+  { docNo: 'AP-300004', vendor: 'V-2004', vendorName: 'MarketEdge Agency', amount: 165000, dueDate: '2024-03-25', paymentDate: '2024-03-18', status: 'cleared' },
+  { docNo: 'AP-300005', vendor: 'V-2005', vendorName: 'DataSecure Systems', amount: 98000, dueDate: '2024-03-28', paymentDate: '2024-03-20', status: 'cleared' },
+];
+
+// ── Cash Management KPIs ───────────────────────────────────
+export function getCashManagementKPIs(): CashKPI[] {
+  const currentBalance = cashLiquidity[cashLiquidity.length - 1].balance;
+  const dso = dsoTrend[dsoTrend.length - 1].dso;
+  const dpo = 45; // simulated
+  const dio = 32; // simulated
+  const ccc = dso + dio - dpo;
+  const latestCollection = cashCollections[cashCollections.length - 1];
+  const forecastAccuracy = ((latestCollection.collected / latestCollection.target) * 100);
+  const fcf = 4200; // simulated in thousands
+
+  return [
+    { label: 'Cash Position', value: `$${(currentBalance / 1e3).toFixed(1)}M`, numericValue: currentBalance, unit: 'USD', status: currentBalance > 12000 ? 'good' : 'warning', trend: 3.2, description: 'Current liquid cash available' },
+    { label: 'Forecast Accuracy', value: `${forecastAccuracy.toFixed(1)}%`, numericValue: forecastAccuracy, unit: '%', status: forecastAccuracy >= 98 ? 'good' : forecastAccuracy >= 95 ? 'warning' : 'critical', trend: 1.4, description: 'Cash flow forecast vs actual' },
+    { label: 'DSO', value: `${dso} days`, numericValue: dso, unit: 'days', status: dso <= 40 ? 'good' : dso <= 50 ? 'warning' : 'critical', trend: -2.1, description: 'Days Sales Outstanding' },
+    { label: 'DPO', value: `${dpo} days`, numericValue: dpo, unit: 'days', status: dpo >= 40 ? 'good' : 'warning', trend: 1.5, description: 'Days Payable Outstanding' },
+    { label: 'CCC', value: `${ccc} days`, numericValue: ccc, unit: 'days', status: ccc <= 30 ? 'good' : ccc <= 45 ? 'warning' : 'critical', trend: -3.0, description: `Cash Conversion Cycle (DSO ${dso} + DIO ${dio} − DPO ${dpo})` },
+    { label: 'Free Cash Flow', value: `$${(fcf / 1e3).toFixed(1)}M`, numericValue: fcf, unit: 'USD', status: fcf > 3000 ? 'good' : 'warning', trend: 5.8, description: 'Operating cash flow minus CapEx' },
+  ];
+}
+
+// ── Process Flow Steps ─────────────────────────────────────
+export interface ProcessFlowStep {
+  id: string;
+  label: string;
+  description: string;
+  status: 'active' | 'warning' | 'error' | 'completed' | 'idle';
+  metrics?: { label: string; value: string }[];
+  anomaly?: string;
+}
+
+export const arProcessFlow: ProcessFlowStep[] = [
+  { id: 'ar', label: 'Accounts Receivable', description: 'Invoice generation & posting', status: 'active', metrics: [{ label: 'Open Items', value: '847' }, { label: 'Value', value: '$10M' }] },
+  { id: 'dunning', label: 'Dunning Notice', description: 'Automated payment reminders', status: 'active', metrics: [{ label: 'Sent', value: '124' }, { label: 'Response', value: '68%' }] },
+  { id: 'call-center', label: 'Call Center', description: 'Customer outreach & negotiation', status: 'warning', metrics: [{ label: 'Active Calls', value: '32' }, { label: 'Resolution', value: '54%' }], anomaly: 'Resolution rate dropped 12% this week' },
+  { id: 'collections', label: 'Collections', description: 'Formal collection actions', status: 'active', metrics: [{ label: 'Cases', value: '18' }, { label: 'Recovered', value: '$420K' }] },
+  { id: 'third-party', label: 'Third Party AR Sale', description: 'Factoring & AR sales', status: 'idle', metrics: [{ label: 'Sold', value: '$0' }, { label: 'Discount', value: 'N/A' }] },
+  { id: 'cash', label: 'Cash', description: 'Payment received & applied', status: 'completed', metrics: [{ label: 'Collected', value: '$7.3M' }, { label: 'Rate', value: '101.4%' }] },
+  { id: 'write-off', label: 'Write-Off', description: 'Uncollectable debt write-off', status: 'error', metrics: [{ label: 'YTD', value: '$85K' }, { label: 'vs Budget', value: '+12%' }], anomaly: 'Write-offs exceeding quarterly budget by 12%' },
+  { id: 'settlement', label: 'Settlement', description: 'Dispute settlements & adjustments', status: 'active', metrics: [{ label: 'Pending', value: '4' }, { label: 'Value', value: '$281K' }] },
+  { id: 'signal', label: 'Signal Processing', description: 'AI pattern detection & alerts', status: 'active', metrics: [{ label: 'Signals', value: '12' }, { label: 'Accuracy', value: '94%' }] },
+];
+
+// ── Agent Orchestration ────────────────────────────────────
+export interface AgentStatus {
+  name: string;
+  role: string;
+  status: 'idle' | 'active' | 'processing' | 'error';
+  lastAction?: string;
+  icon: string;
+}
+
+export const agentStatuses: AgentStatus[] = [
+  { name: 'Orchestrator', role: 'Workflow Controller', status: 'idle', lastAction: 'Dispatched analysis task', icon: '🎯' },
+  { name: 'Sensor', role: 'Data Collection', status: 'idle', lastAction: 'Ingested 2,847 records', icon: '📡' },
+  { name: 'Analyzer', role: 'Data Analysis', status: 'idle', lastAction: 'Computed risk scores', icon: '🔬' },
+  { name: 'Responder', role: 'Report Generator', status: 'idle', lastAction: 'Generated Q1 report', icon: '📊' },
+  { name: 'Learner', role: 'Continuous Learning', status: 'idle', lastAction: 'Updated DSO model', icon: '🧠' },
+];
+
+// ── Risk thresholds ────────────────────────────────────────
+export function getDSORiskLevel(dso: number): 'low' | 'medium' | 'high' {
+  if (dso >= 120) return 'high';
+  if (dso >= 90) return 'medium';
+  return 'low';
+}
+
+export function getHighRiskExposure() {
+  const total = highRiskInvoices.reduce((s, i) => s + i.amount, 0);
+  const byRisk = { high: 0, medium: 0, low: 0 };
+  highRiskInvoices.forEach(inv => { byRisk[inv.riskLevel] += inv.amount; });
+  return { total, byRisk, count: highRiskInvoices.length };
+}
+
 // Summary KPIs for the dashboard header
 export function getSAPKPIs() {
   const totalReceivables = agingDistribution.reduce((s, b) => s + b.amount, 0);
@@ -181,14 +245,8 @@ export function getSAPKPIs() {
   const totalRecovered = writeOffs.reduce((s, w) => s + w.recovered, 0);
 
   return {
-    totalReceivables,
-    overdueTotal,
-    openDisputes,
-    disputeValue,
-    collectionRate: +collectionRate,
-    currentDSO,
-    totalWriteOffs,
-    totalRecovered,
+    totalReceivables, overdueTotal, openDisputes, disputeValue,
+    collectionRate: +collectionRate, currentDSO, totalWriteOffs, totalRecovered,
     liquidityBalance: cashLiquidity[cashLiquidity.length - 1].balance,
   };
 }

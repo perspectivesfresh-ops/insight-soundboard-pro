@@ -10,6 +10,8 @@ import { DSOTab } from '@/components/dashboard/tabs/DSOTab';
 import { AgingReportsTab } from '@/components/dashboard/tabs/AgingReportsTab';
 import { HighRiskTab } from '@/components/dashboard/tabs/HighRiskTab';
 import { CashManagementTab } from '@/components/dashboard/tabs/CashManagementTab';
+import { ProcessFlowTab } from '@/components/dashboard/tabs/ProcessFlowTab';
+import { AgenticAITab } from '@/components/dashboard/tabs/AgenticAITab';
 import { RightSidebar } from '@/components/dashboard/RightSidebar';
 
 const tabs = [
@@ -18,10 +20,12 @@ const tabs = [
   { value: 'ap', label: 'Accounts Payable' },
   { value: 'forecasting', label: 'Forecasting' },
   { value: 'ai-insights', label: 'AI Insights' },
+  { value: 'process-flow', label: 'Process Flow' },
   { value: 'dso', label: 'DSO' },
   { value: 'aging', label: 'Aging Reports' },
   { value: 'high-risk', label: 'High Risk Invoices' },
   { value: 'cash', label: 'Cash Management' },
+  { value: 'agentic-ai', label: 'Agentic AI' },
 ];
 
 export default function Index() {
@@ -32,7 +36,6 @@ export default function Index() {
     <div className="flex flex-1 overflow-hidden">
       <div className="flex-1 overflow-auto">
         <div className="p-4 md:p-6 max-w-[1400px] mx-auto space-y-4">
-          {/* Header */}
           <div>
             <h1 className="text-xl font-display font-bold text-foreground">
               Welcome back, {user?.name?.split(' ')[0] ?? 'User'}
@@ -40,7 +43,6 @@ export default function Index() {
             <p className="text-sm text-muted-foreground">{user?.roleLabel} · Financial Intelligence Platform</p>
           </div>
 
-          {/* Tabbed Navigation */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <div className="overflow-x-auto -mx-4 px-4">
               <TabsList className="h-auto flex-wrap gap-1 bg-transparent p-0">
@@ -61,15 +63,16 @@ export default function Index() {
             <TabsContent value="ap"><AccountsPayableTab /></TabsContent>
             <TabsContent value="forecasting"><ForecastingTab /></TabsContent>
             <TabsContent value="ai-insights"><AIInsightsTab /></TabsContent>
+            <TabsContent value="process-flow"><ProcessFlowTab /></TabsContent>
             <TabsContent value="dso"><DSOTab /></TabsContent>
             <TabsContent value="aging"><AgingReportsTab /></TabsContent>
             <TabsContent value="high-risk"><HighRiskTab /></TabsContent>
             <TabsContent value="cash"><CashManagementTab /></TabsContent>
+            <TabsContent value="agentic-ai"><AgenticAITab /></TabsContent>
           </Tabs>
         </div>
       </div>
 
-      {/* Right Sidebar */}
       <RightSidebar />
     </div>
   );
