@@ -17,8 +17,8 @@ export function TopNav() {
 
   return (
     <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
-      <div className="max-w-[1600px] mx-auto flex items-center justify-between px-4 md:px-6 h-14">
-        <img src={guidantLogo} alt="Guidant.AI" className="h-7 brightness-0 invert" />
+      <div className="max-w-[1600px] mx-auto flex items-center justify-between px-4 md:px-6 h-16">
+        <img src={guidantLogo} alt="Guidant.AI" className="h-12 brightness-0 invert" />
         <nav className="hidden md:flex items-center gap-1">
           {navItems.map(({ to, icon: Icon, label }) => {
             const active = location.pathname === to;

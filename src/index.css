@@ -15,7 +15,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 10%;
 
-    --primary: 263 70% 50%;
+    --primary: 174 62% 38%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 15% 94%;
@@ -24,8 +24,8 @@
     --muted: 220 15% 94%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 263 60% 95%;
-    --accent-foreground: 263 70% 40%;
+    --accent: 174 40% 93%;
+    --accent-foreground: 174 62% 30%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
@@ -38,20 +38,20 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 263 70% 50%;
+    --ring: 174 62% 38%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 263 70% 50%;
+    --sidebar-background: 174 62% 38%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 263 70% 50%;
-    --sidebar-accent: 263 60% 58%;
+    --sidebar-primary-foreground: 174 62% 38%;
+    --sidebar-accent: 174 50% 45%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 263 50% 58%;
+    --sidebar-border: 174 40% 45%;
     --sidebar-ring: 0 0% 100%;
 
-    --chart-1: 263 70% 50%;
+    --chart-1: 174 62% 38%;
     --chart-2: 152 60% 40%;
     --chart-3: 38 92% 50%;
     --chart-4: 200 80% 50%;
@@ -70,7 +70,7 @@
     --popover: 240 10% 12%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 263 70% 60%;
+    --primary: 174 55% 45%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 8% 18%;
@@ -79,8 +79,8 @@
     --muted: 240 8% 18%;
     --muted-foreground: 220 10% 60%;
 
-    --accent: 263 40% 20%;
-    --accent-foreground: 263 70% 75%;
+    --accent: 174 30% 18%;
+    --accent-foreground: 174 55% 70%;
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
@@ -93,18 +93,18 @@
 
     --border: 240 8% 20%;
     --input: 240 8% 20%;
-    --ring: 263 70% 60%;
+    --ring: 174 55% 45%;
 
     --sidebar-background: 240 10% 6%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 263 70% 60%;
+    --sidebar-primary: 174 55% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 8% 14%;
+    --sidebar-accent: 174 20% 14%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 240 8% 16%;
-    --sidebar-ring: 263 70% 60%;
+    --sidebar-border: 174 15% 16%;
+    --sidebar-ring: 174 55% 45%;
 
-    --chart-1: 263 70% 60%;
+    --chart-1: 174 55% 45%;
     --chart-2: 152 50% 50%;
     --chart-3: 38 80% 55%;
     --chart-4: 200 70% 55%;
