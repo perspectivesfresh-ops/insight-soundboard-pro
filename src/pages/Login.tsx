@@ -35,7 +35,6 @@ export default function Login() {
             <img src={guidantLogo} alt="Guidant.AI" className="h-24 w-auto object-contain" />
           </div>
           <div className="text-center">
-            <h1 className="text-2xl font-display font-bold text-foreground">Guidant.AI</h1>
             <p className="text-sm text-muted-foreground mt-1">Financial Intelligence Platform</p>
           </div>
         </div>
