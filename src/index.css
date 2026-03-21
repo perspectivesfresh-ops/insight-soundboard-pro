@@ -6,56 +6,56 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 240 10% 10%;
+    --background: 210 20% 97%;
+    --foreground: 220 25% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
+    --card-foreground: 220 25% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
+    --popover-foreground: 220 25% 12%;
 
-    --primary: 263 70% 50%;
+    --primary: 263 55% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 94%;
-    --secondary-foreground: 240 10% 10%;
+    --secondary: 210 18% 93%;
+    --secondary-foreground: 220 25% 12%;
 
-    --muted: 220 15% 94%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 210 18% 93%;
+    --muted-foreground: 215 12% 48%;
 
-    --accent: 263 60% 95%;
-    --accent-foreground: 263 70% 40%;
+    --accent: 168 35% 92%;
+    --accent-foreground: 168 40% 30%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 65% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 60% 40%;
+    --success: 158 45% 38%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 35 80% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 263 70% 50%;
+    --border: 215 16% 89%;
+    --input: 215 16% 89%;
+    --ring: 263 55% 45%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 263 70% 50%;
+    --sidebar-background: 263 55% 45%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 263 70% 50%;
-    --sidebar-accent: 263 60% 58%;
+    --sidebar-primary-foreground: 263 55% 45%;
+    --sidebar-accent: 263 45% 52%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 263 50% 58%;
+    --sidebar-border: 263 40% 52%;
     --sidebar-ring: 0 0% 100%;
 
-    --chart-1: 263 70% 50%;
-    --chart-2: 152 60% 40%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 200 80% 50%;
-    --chart-5: 340 65% 55%;
+    --chart-1: 263 55% 45%;
+    --chart-2: 158 45% 38%;
+    --chart-3: 35 80% 50%;
+    --chart-4: 200 55% 45%;
+    --chart-5: 168 35% 42%;
 
     font-family: 'Inter', system-ui, sans-serif;
   }
