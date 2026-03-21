@@ -31,7 +31,7 @@ export default function Login() {
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="flex flex-col items-center gap-4">
-          <div className="h-32 w-32 rounded-2xl bg-muted flex items-center justify-center shadow-lg">
+          <div className="h-32 w-32 rounded-2xl flex items-center justify-center shadow-lg bg-primary-foreground">
             <img src={guidantLogo} alt="Guidant.AI" className="h-24" />
           </div>
           <div className="text-center">
@@ -54,8 +54,8 @@ export default function Login() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="pl-10"
-                    autoComplete="username"
-                  />
+                    autoComplete="username" />
+                  
                 </div>
               </div>
               <div className="space-y-2">
@@ -69,14 +69,14 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10"
-                    autoComplete="current-password"
-                  />
+                    autoComplete="current-password" />
+                  
                 </div>
               </div>
 
-              {error && (
-                <p className="text-sm text-destructive font-medium">{error}</p>
-              )}
+              {error &&
+              <p className="text-sm text-destructive font-medium">{error}</p>
+              }
 
               <Button type="submit" className="w-full h-11 font-semibold">
                 Sign In
@@ -97,6 +97,6 @@ export default function Login() {
 
         <p className="text-center text-xs text-muted-foreground">© 2024 Guidant AI Inc. All rights reserved.</p>
       </div>
-    </div>
-  );
+    </div>);
+
 }
