@@ -97,12 +97,12 @@
 
     --sidebar-background: 240 10% 6%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 263 70% 60%;
+    --sidebar-primary: 174 55% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 8% 14%;
+    --sidebar-accent: 174 20% 14%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 240 8% 16%;
-    --sidebar-ring: 263 70% 60%;
+    --sidebar-border: 174 15% 16%;
+    --sidebar-ring: 174 55% 45%;
 
     --chart-1: 263 70% 60%;
     --chart-2: 152 50% 50%;
