@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { generateInsight } from '@/lib/financial-data';
+import { useI18n } from '@/lib/i18n-context';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,8 +12,9 @@ interface Message {
 }
 
 export default function VoiceAssistant() {
+  const { t, lang } = useI18n();
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: 'Hello! I\'m your AI financial assistant. Ask me about revenue, cash flow, expenses, or any financial metric.' },
+    { role: 'assistant', text: t('voicePage.greeting') },
   ]);
   const [input, setInput] = useState('');
   const [listening, setListening] = useState(false);
@@ -25,17 +27,17 @@ export default function VoiceAssistant() {
     const assistantMsg: Message = { role: 'assistant', text: response };
     setMessages((prev) => [...prev, userMsg, assistantMsg]);
     setInput('');
-    // Speak the response
     const utterance = new SpeechSynthesisUtterance(response);
+    utterance.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
     speechSynthesis.speak(utterance);
   };
 
   const generateResponse = (query: string): string => {
     const q = query.toLowerCase();
-    if (q.includes('revenue')) return generateInsight('monthly', 'all');
-    if (q.includes('cash flow')) return 'Cash flow this month is $2.7M, representing an 8.4% increase. Operating cash flow remains strong driven by improved collections.';
-    if (q.includes('expense')) return 'Total expenses are $4.0M. The largest category is salaries at 42%, followed by operations at 18%. Marketing spend has decreased by 2% this quarter.';
-    if (q.includes('profit') || q.includes('margin')) return 'Profit margin is currently at 44.4%, up 2.3% from the previous period. This is driven by revenue growth outpacing expense increases.';
+    if (q.includes('revenue') || q.includes('revenu')) return generateInsight('monthly', 'all');
+    if (q.includes('cash flow') || q.includes('trésorerie') || q.includes('flux')) return 'Cash flow this month is $2.7M, representing an 8.4% increase. Operating cash flow remains strong driven by improved collections.';
+    if (q.includes('expense') || q.includes('dépense')) return 'Total expenses are $4.0M. The largest category is salaries at 42%, followed by operations at 18%. Marketing spend has decreased by 2% this quarter.';
+    if (q.includes('profit') || q.includes('margin') || q.includes('marge') || q.includes('bénéfice')) return 'Profit margin is currently at 44.4%, up 2.3% from the previous period. This is driven by revenue growth outpacing expense increases.';
     if (q.includes('ebitda')) return 'EBITDA stands at $3.7M, up 5.7% from the previous period. Depreciation and amortization remain stable.';
     return `Based on current data: ${generateInsight('monthly', 'all')}`;
   };
@@ -52,7 +54,7 @@ export default function VoiceAssistant() {
       return;
     }
     const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
+    recognition.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
     recognition.onresult = (e: any) => {
       const transcript = e.results[0][0].transcript;
       setInput(transcript);
@@ -64,11 +66,18 @@ export default function VoiceAssistant() {
     recognition.start();
   };
 
+  const quickQueries = [
+    t('voicePage.quickCashFlow'),
+    t('voicePage.quickProfit'),
+    t('voicePage.quickExpenses'),
+    t('voicePage.quickEBITDA'),
+  ];
+
   return (
     <div className="p-4 md:p-8 max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-display font-bold text-foreground">Voice Assistant</h1>
-        <p className="text-sm text-muted-foreground">Ask questions about your financial data</p>
+        <h1 className="text-2xl font-display font-bold text-foreground">{t('voicePage.title')}</h1>
+        <p className="text-sm text-muted-foreground">{t('voicePage.subtitle')}</p>
       </div>
 
       <Card className="border-0 shadow-sm">
@@ -90,7 +99,7 @@ export default function VoiceAssistant() {
           {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
         </Button>
         <Input
-          placeholder="Ask about cash flow, revenue, expenses..."
+          placeholder={t('voicePage.placeholder')}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
@@ -102,7 +111,7 @@ export default function VoiceAssistant() {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        {['Explain cash flow this month', 'What is our profit margin?', 'Break down expenses', 'How is EBITDA trending?'].map((q) => (
+        {quickQueries.map((q) => (
           <Button key={q} variant="outline" size="sm" className="text-xs justify-start" onClick={() => handleSend(q)}>
             {q}
           </Button>

@@ -1,16 +1,18 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Mic, Phone, Video, Settings } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 import guidantLogo from '@/assets/guidant-logo.png';
-
-const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/voice', icon: Mic, label: 'Voice Assistant' },
-  { to: '/call', icon: Phone, label: 'Call Controller' },
-  { to: '/video', icon: Video, label: 'Video Conference' },
-];
 
 export function AppSidebar() {
   const location = useLocation();
+  const { t } = useI18n();
+
+  const navItems = [
+    { to: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
+    { to: '/voice', icon: Mic, label: t('nav.voiceAssistant') },
+    { to: '/call', icon: Phone, label: t('nav.callController') },
+    { to: '/video', icon: Video, label: t('nav.videoConference') },
+  ];
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-primary text-primary-foreground min-h-screen p-4">
