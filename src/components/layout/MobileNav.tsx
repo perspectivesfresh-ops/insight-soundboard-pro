@@ -1,15 +1,17 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Mic, Phone, Video } from 'lucide-react';
-
-const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/voice', icon: Mic, label: 'Voice' },
-  { to: '/call', icon: Phone, label: 'Call' },
-  { to: '/video', icon: Video, label: 'Video' },
-];
+import { useI18n } from '@/lib/i18n-context';
 
 export function MobileNav() {
   const location = useLocation();
+  const { t } = useI18n();
+
+  const navItems = [
+    { to: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
+    { to: '/voice', icon: Mic, label: t('nav.voice') },
+    { to: '/call', icon: Phone, label: t('nav.call') },
+    { to: '/video', icon: Video, label: t('nav.video') },
+  ];
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t z-50">

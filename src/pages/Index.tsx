@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useAuth } from '@/lib/auth-context';
+import { useI18n } from '@/lib/i18n-context';
 import { OverviewTab } from '@/components/dashboard/tabs/OverviewTab';
 import { AccountsReceivableTab } from '@/components/dashboard/tabs/AccountsReceivableTab';
 import { AccountsPayableTab } from '@/components/dashboard/tabs/AccountsPayableTab';
@@ -14,23 +15,24 @@ import { ProcessFlowTab } from '@/components/dashboard/tabs/ProcessFlowTab';
 import { AgenticAITab } from '@/components/dashboard/tabs/AgenticAITab';
 import { RightSidebar } from '@/components/dashboard/RightSidebar';
 
-const tabs = [
-  { value: 'overview', label: 'Overview' },
-  { value: 'ar', label: 'Accounts Receivable' },
-  { value: 'ap', label: 'Accounts Payable' },
-  { value: 'forecasting', label: 'Forecasting' },
-  { value: 'ai-insights', label: 'AI Insights' },
-  { value: 'process-flow', label: 'Process Flow' },
-  { value: 'dso', label: 'DSO' },
-  { value: 'aging', label: 'Aging Reports' },
-  { value: 'high-risk', label: 'High Risk Invoices' },
-  { value: 'cash', label: 'Cash Management' },
-  { value: 'agentic-ai', label: 'Agentic AI' },
-];
-
 export default function Index() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState('overview');
+
+  const tabs = [
+    { value: 'overview', label: t('tabs.overview') },
+    { value: 'ar', label: t('tabs.accountsReceivable') },
+    { value: 'ap', label: t('tabs.accountsPayable') },
+    { value: 'forecasting', label: t('tabs.forecasting') },
+    { value: 'ai-insights', label: t('tabs.aiInsights') },
+    { value: 'process-flow', label: t('tabs.processFlow') },
+    { value: 'dso', label: t('tabs.dso') },
+    { value: 'aging', label: t('tabs.agingReports') },
+    { value: 'high-risk', label: t('tabs.highRiskInvoices') },
+    { value: 'cash', label: t('tabs.cashManagement') },
+    { value: 'agentic-ai', label: t('tabs.agenticAI') },
+  ];
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -38,9 +40,9 @@ export default function Index() {
         <div className="p-4 md:p-6 max-w-[1400px] mx-auto space-y-4">
           <div>
             <h1 className="text-xl font-display font-bold text-foreground">
-              Welcome back, {user?.name?.split(' ')[0] ?? 'User'}
+              {t('dashboard.welcomeBack')}, {user?.name?.split(' ')[0] ?? 'User'}
             </h1>
-            <p className="text-sm text-muted-foreground">{user?.roleLabel} · Financial Intelligence Platform</p>
+            <p className="text-sm text-muted-foreground">{user?.roleLabel} · {t('dashboard.financialPlatform')}</p>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
