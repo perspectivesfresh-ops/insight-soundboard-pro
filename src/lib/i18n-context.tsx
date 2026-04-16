@@ -4,9 +4,7 @@ import { fr } from '@/lib/translations/fr';
 
 export type Language = 'en' | 'fr';
 
-type TranslationMap = typeof en;
-
-const translations: Record<Language, TranslationMap> = { en, fr };
+const translations: Record<Language, Record<string, any>> = { en, fr };
 
 interface I18nContextType {
   lang: Language;
