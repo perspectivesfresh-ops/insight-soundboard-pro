@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { agentStatuses, getSAPKPIs, highRiskInvoices, dsoTrend, getCashManagementKPIs } from '@/lib/sap-financial-data';
 import { Brain, Send, Volume2, VolumeX, Bot, User } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -16,27 +17,28 @@ function getAIResponse(query: string): string {
   const kpis = getSAPKPIs();
   const cashKPIs = getCashManagementKPIs();
 
-  if (q.includes('dso') && (q.includes('increase') || q.includes('why'))) {
+  if (q.includes('dso') && (q.includes('increase') || q.includes('why') || q.includes('augment') || q.includes('pourquoi'))) {
     return `DSO increased from ${dsoTrend[dsoTrend.length - 3].dso} to ${dsoTrend[dsoTrend.length - 2].dso} days last period due to delayed payments from Acme Corp ($850K overdue, 95 days past due) and GlobalTech Ltd ($620K, 72 days). The primary driver is the 90+ day aging bucket growing to $800K (8% of total receivables). Recommendation: Escalate collection efforts on top 2 delinquent accounts.`;
   }
-  if (q.includes('high') && q.includes('risk')) {
+  if (q.includes('high') && q.includes('risk') || q.includes('haut') && q.includes('risque')) {
     const top3 = highRiskInvoices.slice(0, 3);
     return `There are ${highRiskInvoices.length} high-risk invoices totaling $${(highRiskInvoices.reduce((s, i) => s + i.amount, 0) / 1e6).toFixed(2)}M. Top 3:\n• ${top3.map(i => `${i.invoiceNo} (${i.customer}): $${(i.amount / 1e3).toFixed(0)}K — Risk ${i.risk}% — ${i.reason}`).join('\n• ')}`;
   }
-  if (q.includes('cash') || q.includes('liquidity')) {
+  if (q.includes('cash') || q.includes('liquidity') || q.includes('trésorerie') || q.includes('liquidité')) {
     const pos = cashKPIs.find(k => k.label === 'Cash Position');
     const fcf = cashKPIs.find(k => k.label === 'Free Cash Flow');
     return `Current cash position: ${pos?.value}. Free Cash Flow: ${fcf?.value}. Collection rate is at ${kpis.collectionRate}%, exceeding target. Cash Conversion Cycle stands at ${cashKPIs.find(k => k.label === 'CCC')?.value}.`;
   }
-  if (q.includes('collection') || q.includes('overdue')) {
+  if (q.includes('collection') || q.includes('overdue') || q.includes('recouvrement') || q.includes('retard')) {
     return `Collection rate: ${kpis.collectionRate}%. Total overdue: $${(kpis.overdueTotal / 1e6).toFixed(1)}M across 6 customers. ${kpis.openDisputes} open disputes valued at $${(kpis.disputeValue / 1e3).toFixed(0)}K. Write-off recovery rate: ${((kpis.totalRecovered / kpis.totalWriteOffs) * 100).toFixed(0)}%.`;
   }
   return `Based on current data: Total receivables are $${(kpis.totalReceivables / 1e6).toFixed(1)}M with DSO at ${kpis.currentDSO} days (target: 38). ${kpis.openDisputes} active disputes. Collection rate: ${kpis.collectionRate}%. I can answer questions about DSO trends, high-risk invoices, cash position, or collection performance.`;
 }
 
 export function AgenticAITab() {
+  const { t } = useI18n();
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: 'Hello! I\'m your Financial AI Assistant powered by NVIDIA RIVA. Ask me about DSO trends, high-risk invoices, cash position, or any financial KPI.' },
+    { role: 'assistant', content: t('agentic.greeting') },
   ]);
   const [input, setInput] = useState('');
   const [speaking, setSpeaking] = useState(false);
@@ -50,7 +52,6 @@ export function AgenticAITab() {
     const userMsg: ChatMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMsg]);
 
-    // Simulate agent activation
     setAgents(prev => prev.map(a => ({ ...a, status: 'processing' as const })));
     setTimeout(() => {
       const response = getAIResponse(input);
@@ -70,26 +71,24 @@ export function AgenticAITab() {
   };
 
   const quickQueries = [
-    'Why did DSO increase?',
-    'Show high-risk invoices',
-    'What is our cash position?',
-    'Collection performance summary',
+    t('agentic.quickWhyDSO'),
+    t('agentic.quickHighRisk'),
+    t('agentic.quickCashPosition'),
+    t('agentic.quickCollection'),
   ];
 
   return (
     <div className="space-y-4">
       <div className="grid lg:grid-cols-3 gap-4">
-        {/* Chat */}
         <div className="lg:col-span-2">
           <Card className="border-0 shadow-sm h-full flex flex-col">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-display flex items-center gap-2">
-                <Brain className="h-4 w-4 text-primary" /> AI Financial Assistant
+                <Brain className="h-4 w-4 text-primary" /> {t('agentic.aiAssistant')}
                 <Badge variant="secondary" className="text-[10px] ml-auto">NVIDIA RIVA</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col p-0">
-              {/* Quick queries */}
               <div className="flex flex-wrap gap-1.5 px-4 py-2 border-b">
                 {quickQueries.map((q) => (
                   <button key={q} onClick={() => { setInput(q); }} className="text-[10px] px-2.5 py-1 rounded-full border border-border hover:bg-accent transition-colors text-muted-foreground">
@@ -98,7 +97,6 @@ export function AgenticAITab() {
                 ))}
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[400px]">
                 {messages.map((msg, i) => (
                   <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : ''}`}>
@@ -112,7 +110,7 @@ export function AgenticAITab() {
                       {msg.role === 'assistant' && (
                         <button onClick={() => speakMessage(msg.content)} className="mt-1.5 text-[10px] text-muted-foreground hover:text-foreground flex items-center gap-1">
                           {speaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
-                          {speaking ? 'Stop' : 'Listen'}
+                          {speaking ? t('filters.stop') : t('agentic.listen')}
                         </button>
                       )}
                     </div>
@@ -126,10 +124,9 @@ export function AgenticAITab() {
                 <div ref={chatEnd} />
               </div>
 
-              {/* Input */}
               <div className="p-3 border-t flex gap-2">
                 <Input
-                  placeholder="Ask about KPIs, cash, risk..."
+                  placeholder={t('agentic.askPlaceholder')}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -143,12 +140,11 @@ export function AgenticAITab() {
           </Card>
         </div>
 
-        {/* Agent Orchestration Panel */}
         <div>
           <Card className="border-0 shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-display">Agent Orchestration</CardTitle>
-              <p className="text-[10px] text-muted-foreground">Real-time agent status</p>
+              <CardTitle className="text-sm font-display">{t('agentic.agentOrchestration')}</CardTitle>
+              <p className="text-[10px] text-muted-foreground">{t('agentic.realTimeStatus')}</p>
             </CardHeader>
             <CardContent className="space-y-2">
               {agents.map((agent) => (
@@ -170,7 +166,6 @@ export function AgenticAITab() {
             </CardContent>
           </Card>
 
-          {/* Speak Dashboard */}
           <Card className="border-0 shadow-sm mt-3">
             <CardContent className="p-4">
               <Button
@@ -182,7 +177,7 @@ export function AgenticAITab() {
                 }}
               >
                 <Volume2 className="h-4 w-4" />
-                {speaking ? 'Stop Speaking' : 'Speak Dashboard'}
+                {speaking ? t('agentic.stopSpeaking') : t('agentic.speakDashboard')}
               </Button>
             </CardContent>
           </Card>

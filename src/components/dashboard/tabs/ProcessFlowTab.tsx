@@ -1,17 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { arProcessFlow } from '@/lib/sap-financial-data';
 import { ArrowRight, AlertTriangle, CheckCircle, Circle, Loader2, XCircle } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 
 export function ProcessFlowTab() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-4">
       <Card className="border-0 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-display">Accounts Receivable Lifecycle</CardTitle>
-          <p className="text-xs text-muted-foreground">End-to-end process flow with AI anomaly detection</p>
+          <CardTitle className="text-sm font-display">{t('process.arLifecycle')}</CardTitle>
+          <p className="text-xs text-muted-foreground">{t('process.arLifecycleDesc')}</p>
         </CardHeader>
         <CardContent>
-          {/* Horizontal scrollable flow */}
           <div className="overflow-x-auto pb-4">
             <div className="flex items-start gap-0 min-w-max">
               {arProcessFlow.map((step, i) => (
@@ -29,11 +31,10 @@ export function ProcessFlowTab() {
         </CardContent>
       </Card>
 
-      {/* Anomaly Highlights */}
       <Card className="border-0 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-display flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-warning" /> AI-Detected Anomalies
+            <AlertTriangle className="h-4 w-4 text-warning" /> {t('process.aiAnomalies')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -51,7 +52,6 @@ export function ProcessFlowTab() {
         </CardContent>
       </Card>
 
-      {/* Detail Grid */}
       <div className="grid md:grid-cols-3 gap-3">
         {arProcessFlow.filter(s => s.metrics).map((step) => (
           <Card key={step.id} className="border-0 shadow-sm">
@@ -77,6 +77,7 @@ export function ProcessFlowTab() {
 }
 
 function FlowNode({ step }: { step: typeof arProcessFlow[0] }) {
+  const { t } = useI18n();
   const statusStyles: Record<string, string> = {
     active: 'border-primary bg-primary/5',
     warning: 'border-warning bg-warning/5',
@@ -95,7 +96,7 @@ function FlowNode({ step }: { step: typeof arProcessFlow[0] }) {
       <p className="text-[10px] text-muted-foreground leading-tight">{step.description}</p>
       {step.anomaly && (
         <div className="mt-2 p-1.5 rounded bg-warning/10 border border-warning/20">
-          <p className="text-[9px] text-warning font-medium">⚠ Anomaly detected</p>
+          <p className="text-[9px] text-warning font-medium">{t('process.anomalyDetected')}</p>
         </div>
       )}
     </div>

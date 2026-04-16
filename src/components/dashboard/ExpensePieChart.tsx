@@ -1,12 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { expenseBreakdown } from '@/lib/financial-data';
+import { useI18n } from '@/lib/i18n-context';
 
 export function ExpensePieChart() {
+  const { t } = useI18n();
   return (
     <Card className="border-0 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-display">Expense Breakdown</CardTitle>
+        <CardTitle className="text-base font-display">{t('charts.expenseBreakdown')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={280}>

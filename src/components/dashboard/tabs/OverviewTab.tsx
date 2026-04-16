@@ -10,11 +10,13 @@ import { getKPIs, getRevenueData, generateInsight, type TimePeriod, type Departm
 import { getSAPKPIs } from '@/lib/sap-financial-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { TrendingUp, TrendingDown, DollarSign, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 
 export function OverviewTab() {
   const [period, setPeriod] = useState<TimePeriod>('monthly');
   const [department, setDepartment] = useState<Department>('all');
   const [speaking, setSpeaking] = useState(false);
+  const { t } = useI18n();
 
   const kpis = getKPIs(period, department);
   const chartData = getRevenueData(period);
@@ -31,49 +33,45 @@ export function OverviewTab() {
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <Select value={period} onValueChange={(v) => setPeriod(v as TimePeriod)}>
           <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="monthly">Monthly</SelectItem>
-            <SelectItem value="quarterly">Quarterly</SelectItem>
-            <SelectItem value="yearly">Yearly</SelectItem>
+            <SelectItem value="monthly">{t('filters.monthly')}</SelectItem>
+            <SelectItem value="quarterly">{t('filters.quarterly')}</SelectItem>
+            <SelectItem value="yearly">{t('filters.yearly')}</SelectItem>
           </SelectContent>
         </Select>
         <Select value={department} onValueChange={(v) => setDepartment(v as Department)}>
           <SelectTrigger className="w-[130px] h-8 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Departments</SelectItem>
-            <SelectItem value="engineering">Engineering</SelectItem>
-            <SelectItem value="sales">Sales</SelectItem>
-            <SelectItem value="marketing">Marketing</SelectItem>
-            <SelectItem value="operations">Operations</SelectItem>
-            <SelectItem value="hr">HR</SelectItem>
+            <SelectItem value="all">{t('filters.allDepartments')}</SelectItem>
+            <SelectItem value="engineering">{t('filters.engineering')}</SelectItem>
+            <SelectItem value="sales">{t('filters.sales')}</SelectItem>
+            <SelectItem value="marketing">{t('filters.marketing')}</SelectItem>
+            <SelectItem value="operations">{t('filters.operations')}</SelectItem>
+            <SelectItem value="hr">{t('filters.hr')}</SelectItem>
           </SelectContent>
         </Select>
         <Button variant={speaking ? 'destructive' : 'outline'} size="sm" onClick={speakDashboard} className="gap-1.5 h-8 text-xs">
           <Volume2 className="h-3.5 w-3.5" />
-          {speaking ? 'Stop' : 'Speak'}
+          {speaking ? t('filters.stop') : t('filters.speak')}
         </Button>
       </div>
 
-      {/* Large Infographic KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <InfographicKPI icon={DollarSign} label="Total Receivables" value={`$${(sapKPIs.totalReceivables / 1e6).toFixed(1)}M`} change={3.2} trend="up" color="primary" />
-        <InfographicKPI icon={Clock} label="Current DSO" value={`${sapKPIs.currentDSO} days`} change={-2.1} trend="down" color="success" />
-        <InfographicKPI icon={AlertTriangle} label="Overdue" value={`$${(sapKPIs.overdueTotal / 1e6).toFixed(1)}M`} change={5.4} trend="up" color="destructive" />
-        <InfographicKPI icon={CheckCircle} label="Collection Rate" value={`${sapKPIs.collectionRate}%`} change={1.4} trend="up" color="success" />
-        <InfographicKPI icon={DollarSign} label="Liquidity" value={`$${(sapKPIs.liquidityBalance / 1e3).toFixed(0)}K`} change={2.8} trend="up" color="primary" />
-        <InfographicKPI icon={AlertTriangle} label="Open Disputes" value={`${sapKPIs.openDisputes}`} change={-1} trend="down" color="warning" />
+        <InfographicKPI icon={DollarSign} label={t('kpi.totalReceivables')} value={`$${(sapKPIs.totalReceivables / 1e6).toFixed(1)}M`} change={3.2} trend="up" color="primary" />
+        <InfographicKPI icon={Clock} label={t('kpi.currentDSO')} value={`${sapKPIs.currentDSO} ${t('kpi.days')}`} change={-2.1} trend="down" color="success" />
+        <InfographicKPI icon={AlertTriangle} label={t('kpi.overdue')} value={`$${(sapKPIs.overdueTotal / 1e6).toFixed(1)}M`} change={5.4} trend="up" color="destructive" />
+        <InfographicKPI icon={CheckCircle} label={t('kpi.collectionRate')} value={`${sapKPIs.collectionRate}%`} change={1.4} trend="up" color="success" />
+        <InfographicKPI icon={DollarSign} label={t('kpi.liquidity')} value={`$${(sapKPIs.liquidityBalance / 1e3).toFixed(0)}K`} change={2.8} trend="up" color="primary" />
+        <InfographicKPI icon={AlertTriangle} label={t('kpi.openDisputes')} value={`${sapKPIs.openDisputes}`} change={-1} trend="down" color="warning" />
       </div>
 
-      {/* Standard KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {kpis.map((kpi, i) => <KPICard key={kpi.label} kpi={kpi} index={i} />)}
       </div>
 
-      {/* Charts */}
       <div className="grid lg:grid-cols-2 gap-4">
         <RevenueChart data={chartData} />
         <ComparisonChart data={chartData} />
@@ -82,11 +80,11 @@ export function OverviewTab() {
         <ExpensePieChart />
         <Card className="border-0 shadow-sm">
           <CardContent className="p-5">
-            <h3 className="text-sm font-display font-semibold mb-2">AI Insights</h3>
+            <h3 className="text-sm font-display font-semibold mb-2">{t('charts.aiInsights')}</h3>
             <p className="text-xs text-muted-foreground leading-relaxed">{generateInsight(period, department)}</p>
             <div className="mt-3 p-3 bg-accent rounded-lg">
-              <p className="text-xs font-medium text-accent-foreground">💡 Recommendation</p>
-              <p className="text-[11px] text-muted-foreground mt-1">Consider reallocating 3% of marketing budget to R&D based on current growth trajectories.</p>
+              <p className="text-xs font-medium text-accent-foreground">{t('charts.recommendation')}</p>
+              <p className="text-[11px] text-muted-foreground mt-1">{t('charts.recommendationText')}</p>
             </div>
           </CardContent>
         </Card>

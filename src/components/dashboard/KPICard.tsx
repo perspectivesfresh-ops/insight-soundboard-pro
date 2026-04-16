@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import type { KPI } from '@/lib/financial-data';
+import { useI18n } from '@/lib/i18n-context';
 
 interface KPICardProps {
   kpi: KPI;
@@ -9,6 +10,7 @@ interface KPICardProps {
 
 export function KPICard({ kpi, index }: KPICardProps) {
   const isPositive = kpi.trend === 'up';
+  const { t } = useI18n();
 
   return (
     <Card className="animate-fade-in border-0 shadow-sm hover:shadow-md transition-shadow" style={{ animationDelay: `${index * 80}ms` }}>
@@ -18,7 +20,7 @@ export function KPICard({ kpi, index }: KPICardProps) {
         <div className={`flex items-center gap-1 mt-2 text-sm font-medium ${isPositive ? 'text-success' : 'text-destructive'}`}>
           {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
           <span>{Math.abs(kpi.change)}%</span>
-          <span className="text-muted-foreground font-normal">vs prev</span>
+          <span className="text-muted-foreground font-normal">{t('kpi.vsPrev')}</span>
         </div>
       </CardContent>
     </Card>
